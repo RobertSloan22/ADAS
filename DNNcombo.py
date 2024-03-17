@@ -15,6 +15,7 @@ GREEN = (0, 255, 0)
 BLUE = (255, 0, 0)
 # Constants for vehicle width and camera focal length
 REAL_WIDTH = 6
+KNOWN_WIDTH = 6
 FOCAL_LENGTH = 720
 # Load reference image and calculate focal length
 ref_image = cv2.imread("logitech.png")
@@ -93,9 +94,8 @@ def display_lines(image, lines):
     if lines is not None:
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4)
-            cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 50)
+            cv2.line(line_image, (x1, y1), (x2, y2), (0,255, 0), 25)
     return line_image
-
 
 def region_of_interest(image):
     height, width = image.shape[:2]
@@ -112,9 +112,9 @@ def region_of_interest(image):
 
 # Initialize video capture and buttons
 # Initialize video capture and buttons
-cap = cv2.VideoCapture(1)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+cap = cv2.VideoCapture('freeway.mp4')
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 
 
 #Active buttons for class detection
@@ -123,6 +123,10 @@ button.add_button("person", 0, 0)
 button.add_button("truck", 200, 0)
 button.add_button("car", 400, 0)
 button.add_button("bus", 600, 0)
+
+# Define the location for where the alert message should be displayed in the upper left hand corner of the frame
+alert_message_location = (10, 35)
+
 
 
 colors = button.colors
@@ -158,7 +162,7 @@ def gen_frames():
     while True:
         ret, frame = cap.read()
         _, frame = cap.read()
-        frame = cv2.flip(frame, -1)
+        #frame = cv2.flip(frame, -1)
         combo_image = frame
         canny_image = canny(frame)
         cropped_image = region_of_interest(canny_image)
@@ -188,6 +192,8 @@ def gen_frames():
                 distances.append((distance, class_id, score, bbox))
             distances.sort()
             nearest_cars = distances[:3]  # Get the three nearest cars
+            # Display the distance to all detected cars in the upper left hand corner of the frame
+         
             # Process the nearest cars
             for distance, class_id, score, bbox in nearest_cars:
                 (x, y, w, h) = bbox
@@ -204,10 +210,10 @@ def gen_frames():
                 # Draw the bounding circle
                 cv2.circle(frame, center, radius, BLUE, thickness=4)
                 # Draw lines emanating from the center of the circle
-                for angle in range(0, 360, 90):
-                    end_point_x = int(center[0] + radius * math.cos(math.radians(angle)))
-                    end_point_y = int(center[1] + radius * math.sin(math.radians(angle)))
-                    cv2.line(frame, center, (end_point_x, end_point_y), color, thickness=3)
+               # for angle in range(0, 360, 90):
+                    #end_point_x = int(center[0] + radius * math.cos(math.radians(angle)))
+                    #end_point_y = int(center[1] + radius * math.sin(math.radians(angle)))
+                   # cv2.line(frame, center, (end_point_x, end_point_y), color, thickness=3)
                 
                 # Distance calculation for detected vehicles and objects
                 if class_name in ["person", "car", "truck", "bus", "motorbike", "stop sign"]:
@@ -215,14 +221,18 @@ def gen_frames():
                     distance_in_feet = distance_to_camera(REAL_WIDTH, FOCAL_LENGTH, perceived_width)
                     
                     if distance_in_feet < 50:  # Adjust this threshold as needed
-                        alert_message = "{} is {} feet away".format(class_name, round(distance_in_feet, 4))
-                        cv2.putText(frame, alert_message, (x, y - 50), cv2.FONT_HERSHEY_SIMPLEX, 2.5, (0, 0, 255), 3)
+                        distance_message = "DETECTION: {} is {} feet away".format(class_name, round(distance_in_feet, 2))
+                        cv2.putText(frame, distance_message, (10, 35), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 3)
                         if distance_in_feet < 15:
-                            alert_message = "{} is {} FT".format(class_name, round(distance_in_feet, 2))
-                            cv2.putText(frame, alert_message, (int(frame.shape[1] / 2 - 150), int(frame.shape[0] / 2)), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 4)
+                            alert_message = "PROXIMITY ALERT".format(class_name, round(distance_in_feet, 2))
+                            cv2.putText(frame, alert_message, (int(frame.shape[1] / 2 - 150), int(frame.shape[0] / 2)), cv2.FONT_HERSHEY_SIMPLEX, 1.1, (0, 0, 255), 4)
                             cv2.rectangle(frame, (int(frame.shape[1] / 2 - 150), int(frame.shape[0] / 2 - 75)), (int(frame.shape[1] / 2 + 150), int(frame.shape[0] / 2 + 75)), (0, 0, 255), 4)        
-        
-        fused_image = cv2.addWeighted(combo_image, 0.4, frame, 0.6, 0)
+                            # Print the alert message to the console and on the left hand side of the top of the frame 
+                            print(alert_message)
+                            #cv2.putText(frame, alert_message, alert_message_location, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                            
+                
+        fused_image = cv2.addWeighted(combo_image, 0.5, frame, 0.5, 0)
         
     # Replace 'frame' with 'fused_image' in the following line
         ret, buffer = cv2.imencode('.jpg', fused_image)

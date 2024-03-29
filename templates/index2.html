@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Robert Sloan</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/heroes/">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/heroes/">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
+
+    
+
+    <!-- Bootstrap core CSS -->
+    <link href="/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="/docs/5.0/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/5.0/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="nasalogo.png" color="#7952b3">
+    <link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico">
+    <meta name="theme-color" content="#7952b3">
+
+
+    <link rel="stylesheet" href="index.css">
+    
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">  
+
+
+    <!-- Bootstrap core CSS -->
+<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    <style>
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: Grey;
+    }
+    .navbar {
+        width: 100%;
+        background-color: blue;
+        overflow: auto;
+        position: fixed;
+        top: 0;
+    }
+    .navbar a {
+        float: left;
+        padding: 12px;
+        color: white;
+        text-decoration: none;
+        font-size: 25px;
+    }
+    .navbar a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+    img {
+        width: 400px;
+        height: calc(400px); /* Adjust based on the height of your navbar */
+        margin-top: 50px; /* Adjust based on the height of your navbar */
+    }
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.video-feed, .pano {
+  flex: 1 1 auto;
+  margin: 10px;
+  width: 300px;
+}
+</style>
+<meta charset="utf-8">
+<title>Real-time Bus Tracking with Mapbox</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css" rel="stylesheet">
+<style>
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+    <!-- Custom styles for this template -->
+    <link href="heroes.css" rel="stylesheet">
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFCqSlD9Oc1TgnslsOtrmY7opuFx7Q2q8"></script>
+        <script>
+          // Get the current position of the user
+          navigator.geolocation.getCurrentPosition(function (position) {
+            // Create a new Street View panorama at the user's location
+            var panorama = new google.maps.StreetViewPanorama(
+              document.getElementById('pano'),
+              {
+                position: { lat: position.coords.latitude, lng: position.coords.longitude },
+                pov: { heading: 0, pitch: 0 },
+                zoom: 1
+              }
+            );
+          });
+        </script>
+
+  </head>
+  <body>
+    <div id="map"></div>
+        <div class="map-overlay top">
+            <button style="font-size: 2em" onclick="move()">
+                Show stops between MIT and Harvard
+            </button>
+        </div>
+    <script src="index.js"></script>
+</body>
+
+
+<div id="map"></div>
+    <div class="topnav">
+        <!--set the button 'goToGithub' to have white text color-->
+        <a button onclick="goToGitHub()">Go to GitHub home page.</button> </a>
+          <script>
+            function goToGitHub() {
+             window.location.href = "https://www.github.com";
+           }
+          </script>
+      </div>
+<main>
+  <div class="navbar">
+    <a href="#home">SRX-4</a>
+    <a href="#about">
+    </a>
+
+    <a href="#contact">ADAS-DEFENSE SYSTEM </a>
+</div>
+<div class="row">
+  <div class="video-feed">
+    <img src="{{ url_for('video_feed') }}" />
+  </div>
+  <div class="street-view" id="pano"></div>
+</div>
+  <div class="row">
+    <div class="column-1">
+      <div class="px-4 py-5 my-5 text-left">
+        <h1 class="display-5 fw-bold text-white">Robert Sloan</h1>
+        <div class="col-lg-6 text-left">
+          <p class="lead mb-4 text-white">MIT Full Stack Development Github Portfolio Homepage.</p>
+          <div class="d-grid gap-2 d-sm-flex">
+            <button onclick="location.href='https://github.com/RobertSloan22'" type="button">Visit RobertSloan22's Profile</button>
+            <button onclick="location.href='https://github.com/RobertSloan22?tab=repositories'" type="button">Visit RobertSloan22's Repositories</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-example-divider"></div>
+  <div class="column-2">
+    
+    <div class="px-4 py-5 my-5 text-center">
+      <h1 class="display-5 fw-bold text-white">MIT-FULLSTACK DEVELOPER PROGRAM 2023</h1>
+    <div class="px-4 py-5 my-5 text-center">
+        <h2 class="display-5 fw-bold text-white text-center">MIT-CODING ASSIGNMENT LINKS / INTERACTIVE MAP USING GOOGLES API </h2>
+        <p class="lead mb-4 text-white text-right">MIT Full Stack Development Github Portfolio Homepage.</p>
+        <div class="d-grid gap-2 d-sm-flex btn-align-center">
+          <button type="button" class="btn btn-primary btn-lg px-4 gap-3" onclick="window.location.href='https://www.github.com'">GITHUB HOMEPAGE</button>
+          <button onclick="location.href='https://github.com/RobertSloan22/PacmanPortfolio'" type="button" class="btn btn-primary btn-lg px-4 gap-3">MIT- PACMAN - MODULE-7 </button>
+          <button onclick="location.href='https://github.com/RobertSloan22/eye-exercise'" type="button" class="btn btn-primary btn-lg px-4 gap-3">MIT- EYES-MODULE-8 </button>
+          <button onclick="location.href='https://github.com/RobertSloan22/Bus-tracking'" type="button" class="btn btn-primary btn-lg px-4 gap-3">Visit Bus Tracking Repository</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--div class="px-4 pt-5 my-5 text-center border-bottom">
+    <h1 class="display-4 fw-bold">Centered screenshot</h1>
+    <div class="col-lg-6 mx-auto">
+      <p class="lead mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
+      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+        <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3">Primary button</button>
+        <button type="button" class="btn btn-outline-secondary btn-lg px-4">Secondary</button>
+      </div>
+    </div>
+    <div class="overflow-hidden" style="max-height: 30vh;">
+      <div class="container px-5">
+        <img src="bootstrap-docs.png" class="img-fluid border rounded-3 shadow-lg mb-4" alt="Example image" width="700" height="500" loading="lazy">
+      </div>
+    </div>
+-->
+<div class="column-2">
+    <div class="container">
+      <div class="row-2">
+          <div id="map">
+            <div id="search-box">
+              <input type="text" placeholder="Search...">
+            </div>
+            
+            <script>
+      // Initialize the Autocomplete object
+             var autocomplete = new google.maps.places.Autocomplete(
+             document.getElementById('search-box').getElementsByTagName('input')[0]
+              );
+  
+    // Set the bounds of the search to the current viewport
+              autocomplete.bindTo('bounds', map);
+  
+    // Add a listener to the Autocomplete object to update the map's center when a place is selected
+              autocomplete.addListener('place_changed', function () {
+              var place = autocomplete.getPlace();
+                if (place.geometry) {
+               map.setCenter(place.geometry.location);
+               }
+              });
+            </script>
+  
+             <script>
+                mapboxgl.accessToken = 'pk.eyJ1IjoiZGFuc3dpY2siLCJhIjoiY2l1dTUzcmgxMDJ0djJ0b2VhY2sxNXBiMyJ9.25Qs4HNEkHubd4_Awbd8Og';
+                var map= new mapboxgl.Map({
+                container: 'map', 
+                style: 'mapbox://styles/mapbox/streets-v11', 
+                center: [-74.50, 40],
+                zoom: 5 
+                });
+             </script>
+          </div>
+          <div id="datetime"></div>
+            <script>
+            var datetime = document.getElementById('datetime');
+            setInterval(function () {
+            datetime.innerHTML = new Date().toLocaleString();
+            }, 1000);
+          </script>
+
+          
+    <!--AIzaSyDFCqSlD9Oc1TgnslsOtrmY7opuFx7Q2q8-->
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFCqSlD9Oc1TgnslsOtrmY7opuFx7Q2q8"></script>
+      <div id="map">
+        <div id="search-box">
+          <input type="text" placeholder="Search...">
+          <button type="button" onclick="search()">Search</button>
+        </div>
+        <script>
+          // Initialize the StreetViewService object
+          var service = new google.maps.StreetViewService();
+        
+          // Function to perform a search and display the results on the Street View
+          function search() {
+            var query = document.getElementById('search-box').getElementsByTagName('input')[0].value;
+        
+            // Perform a search for the given query
+            service.getPanorama({ location: query, radius: 50 }, function (result, status) {
+              if (status === 'OK') {
+                // Set the position of the Street View to the location of the search result
+                var panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'));
+                panorama.setPano(result.location.pano);
+                panorama.setVisible(true);
+              } else {
+                // Handle error cases
+                alert('Error: ' + status);
+              }
+            });
+          }
+        </script>
+        
+      </div>
+      <div id="title">GOOGLE-STREET-VIEW</div>
+      
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFCqSlD9Oc1TgnslsOtrmY7opuFx7Q2q8"></script>
+    <div id="pano">
+      <script>
+        // Get the current position of the user
+        navigator.geolocation.getCurrentPosition(function (position) {
+          // Create a new map centered at the user's location
+        var map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: position.coords.latitude, lng: position.coords.longitude },
+        zoom: 14
+        });
+      
+          // Add a marker at the user's location
+        var marker = new google.maps.Marker({
+        position: { lat: position.coords.latitude, lng: position.coords.longitude },
+            map: map,
+            title: 'Your Location'
+          });
+        });
+      </script>
+
+
+      <script>
+        // Get the current position of the user
+        navigator.geolocation.getCurrentPosition(function (position) {
+          // Create a new Street View panorama at the user's location
+          var panorama = new google.maps.StreetViewPanorama(
+            document.getElementById('pano'),
+            {
+              position: { lat: position.coords.latitude, lng: position.coords.longitude },
+              pov: { heading: 0, pitch: 0 },
+              zoom: 1
+            }
+          );
+        });
+      </script>
+    </div>
+
+  <div class="container col-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+      <div class="col-lg-7 text-center text-lg-start">
+        <h1 class="display-4 fw-bold lh-1 mb-3 text-white">Object Detection using Tensor-Flow</h1>
+        <p class="col-lg-10 fs-4 text-white">Yolo -V5 with graphical user interface</p>
+      </div>
+      <div class="col-md-10 mx-auto col-lg-5">
+        <form class="p-4 p-md-5 border rounded-3 bg-light">
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+            <label for="floatingInput">Email address</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+          </div>
+          <div class="checkbox mb-3">
+            <label>
+              <input type="checkbox" value="remember-me"> Remember me
+            </label>
+          </div>
+          <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
+          <hr class="my-4">
+          <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-example-divider"></div>
+  <div id="map" style="width: 600px; height: 400px"></div>
+
+
+  <div class="b-example-divider"></div>
+
+  <div class="bg-dark text-secondary px-4 py-5 text-center">
+    <div class="py-5">
+      <h1 class="display-5 fw-bold text-white">Auto-mechanic for 17+ years </h1>
+      <div class="col-lg-6 mx-auto">
+        <p class="fs-5 mb-4">Personal Vehicle projects include object detection of vehicles and holographic heads up display</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <button type="button" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold">CUSTOM MADE HOLOGRAPHIC HUD</button>
+          <button type="button" class="btn btn-outline-light btn-lg px-4">CUSTOM USER INTERFACE BMW</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-example-divider mb-0"></div>
+</main>
+
+
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+      
+  </body>
+</html>
+  

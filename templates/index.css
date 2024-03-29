@@ -1,0 +1,181 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 5px;
+  }
+  
+  /* Style the header */
+  .header {
+    background-image: url('index_flag.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  /* Style the top navigation bar */
+  /* Style the top navigation bar */
+  .topnav {
+    overflow: hidden;
+    background-color: #d6d7dd; /* Metalic Silver */
+  }
+  
+  /* Style the topnav links */
+  .topnav a {
+    float: left;
+    display: block;
+    text-emphasis-color: rgb(240, 204, 204);
+    text-emphasis: bold-sans-serif;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;}
+  
+  /* Change color on hover */
+  .topnav a:hover {
+    background-color: #4767d8; /* Darker Metalic Silver */
+    color: #ffffff; /* White */
+  }
+  
+  
+  /* Create three equal columns that floats next to each other */
+  .column {
+    float: left;
+    width: 33.33%;
+    padding: 15px;
+  }
+  
+  /* Define background images for columns */
+  .column-1 {
+    background-image: url('eartlight.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; 
+    padding: 10px;
+    text-align: left; 
+    font-size: 30px;
+    color: white;
+  }
+  
+  .column-2 {
+    background-image: url('eartlight.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 10px;
+  }
+  
+  .column-3 {
+    background-image: url('eartlight.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 10px;
+  }
+  #map {
+    width: 100%;
+    height: 400px;
+    position: right;
+    clear: both;
+    margin-top: 5px; /* adjust as needed */
+  }
+  
+  .footer {
+    position: relative;
+    margin-top: -300px;
+    z-index: 1;
+    background-color: #1ac4ee;
+    color: #fff;
+    padding: 40px 0;
+  }
+  
+  .footer h3 {
+    margin-bottom: 20px;
+  }
+  
+  .footer p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    text-align: center;
+  
+  }
+  
+  .footer a {
+    color: #fff;
+  }
+  
+  .footer a:hover {
+    color: #00ff40;
+  }
+  
+  .btn-primary {
+    background-color: rgb(8, 245, 4);
+    color: rgb(0, 255, 13);
+    border: 1px solid rgb(6, 240, 46);
+  }
+  
+  /* Style for the primary button */
+  .btn-primary {
+    background-color: #C4C4C4; /* change to the desired metallic silver color */
+    color: #FFFFFF; /* text color */
+    border-color: #C4C4C4; /* border color */
+  }
+  
+  /* Hover style for the primary button */
+  .btn-primary:hover {
+    background-color: #036df8; /* change to the desired color when hovering */
+    color: #FFFFFF;
+    border-color: #B0B0B0;
+  }
+  
+  /* Style for the large button */
+  .btn-lg {
+    font-size: 1.25rem; /* change to the desired font size */
+    padding: 0.5rem 1.5rem; /* change to the desired padding */
+  }
+  
+  /* Style for the gap between buttons */
+  .gap-3 {
+    margin-right: 0.75rem; /* change to the desired gap */
+  }
+  
+  #datetime {
+    background-color: #2a30f3;
+    border: 2px solid #06fb27;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #24ef04;
+    border-radius: 5px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  #pano {
+    height: 400px;
+    width: 100%;
+    background-color: white; 
+  }
+  
+  #map {
+    grid-row: 1 / 1;
+    grid-column: 1 / 3;
+
+    width: 600px;
+    height: 600px;
+    margin: 0 auto;
+  }
+  
+
+  
+  
+  
+  /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+  @media screen and (max-width:600px) {
+    .column {
+      width: 100%;
+    }
+  }

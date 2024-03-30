@@ -145,8 +145,7 @@ def click_button(event, x, y, flags, params):
     if event == cv2.EVENT_LBUTTONDOWN:
         button.button_click(x, y)
 
-cv2.namedWindow("Frame", cv2.WINDOW_NORMAL)
-cv2.setMouseCallback("Frame", click_button)
+
 @app.route('/')
 
 def index():
@@ -167,7 +166,7 @@ def gen_frames():
             if averaged_lines is not None and all(line is not None for line in averaged_lines):
                 line_image = display_lines(frame, averaged_lines)
                 combo_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
-                cv2.imshow("result", combo_image)
+              
 
                 # Replace 'frame' with 'combo_image' in the following line
           

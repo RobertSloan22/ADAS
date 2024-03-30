@@ -103,7 +103,7 @@ def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 def gen_frames(): 
-    cap = cv2.VideoCapture(1) # Change 0 to your video source
+    cap = cv2.VideoCapture(0) # Change 0 to your video source
     while True:
         success, frame = cap.read()
         ret, frame = cap.read()

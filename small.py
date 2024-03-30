@@ -112,7 +112,7 @@ def region_of_interest(image):
 
 # Initialize video capture and buttons
 # Initialize video capture andr buttons
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 960)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 540)
 
@@ -171,7 +171,6 @@ def gen_frames():
             if averaged_lines is not None and all(line is not None for line in averaged_lines):
                 line_image = display_lines(frame, averaged_lines)
                 combo_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
-                cv2.imshow("result", combo_image)
 
                 # Replace 'frame' with 'combo_image' in the following line
           

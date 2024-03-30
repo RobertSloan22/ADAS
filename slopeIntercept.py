@@ -111,7 +111,7 @@ def region_of_interest(image):
 
 
 # Initialize video capture and buttons
-cap = cv2.VideoCapture('freeway.mp4')
+cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 

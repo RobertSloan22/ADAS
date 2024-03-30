@@ -113,7 +113,7 @@ def video_feed():
 
 def gen_frames():
     """Generates video frames."""
-    cap = cv2.VideoCapture(1)  # Use your video source
+    cap = cv2.VideoCapture(0)  # Use your video source
     while True:
         success, frame = cap.read()
         ret, frame = cap.read()

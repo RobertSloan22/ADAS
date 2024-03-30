@@ -113,7 +113,7 @@ def video_feed():
 
 def gen_frames():
     """Generates video frames."""
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 960)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 540)
 # Use your video source

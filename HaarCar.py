@@ -2,6 +2,8 @@ from flask import Flask, render_template, Response
 import cv2
 import math
 import numpy as np
+import json
+import os
 
 app = Flask(__name__)
 
@@ -93,7 +95,46 @@ def region_of_interest(image):
     cv2.fillPoly(mask, triangle, 255)
     masked_image = cv2.bitwise_and(image, mask)
     return masked_image
+LOCATION_FILE = './locations.json'
 
+@app.route('/', methods=['POST'])
+def save_location():
+    """
+    Save location data received in POST request to a local file.
+    """
+    new_location = request.json
+    new_location['timestamp'] = str(datetime.now())  # Add a timestamp to each location
+
+    # Ensure the directory exists
+    if not os.path.exists(os.path.dirname(LOCATION_FILE)):
+        os.makedirs(os.path.dirname(LOCATION_FILE))
+
+    # Read existing locations from the file, or start with an empty list if the file doesn't exist
+    try:
+        with open(LOCATION_FILE, 'r') as file:
+            locations = json.load(file)
+    except FileNotFoundError:
+        locations = []
+
+    # Add the new location and write back to the file
+    locations.append(new_location)
+    with open(LOCATION_FILE, 'w') as file:
+        json.dump(locations, file, indent=2)
+
+    return '', 200
+
+@app.route('/locations', methods=['GET'])
+def get_locations():
+    """
+    Retrieve all saved location data from the local file.
+    """
+    try:
+        with open(LOCATION_FILE, 'r') as file:
+            locations = json.load(file)
+    except FileNotFoundError:
+        locations = []
+
+    return jsonify(locations)
 @app.route('/')
 def index():
     return render_template('index1.html')

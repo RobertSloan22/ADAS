@@ -93,6 +93,41 @@ body, html {
     <tbody>
     </tbody>
 </table>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize the map
+        var map = L.map('map').setView([0, 0], 1); // Default view
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Function to add a marker for each location
+        function addLocationMarker(location) {
+            var [lat, lon] = location.loc.split(',');
+            L.marker([lat, lon]).addTo(map)
+                .bindPopup(`Lat: ${lat}, Lon: ${lon}`);
+        }
+
+        // Fetch locations from the Flask backend
+        fetch('/locations')
+            .then(response => response.json())
+            .then(locations => {
+                locations.forEach(location => {
+                    addLocationMarker(location);
+                });
+                if (locations.length > 0) {
+                    // Adjust the map view to show all markers
+                    var group = new L.featureGroup(locations.map(location => {
+                        var [lat, lon] = location.loc.split(',');
+                        return L.marker([lat, lon]);
+                    }));
+                    map.fitBounds(group.getBounds());
+                }
+            })
+            .catch(error => console.error('Error loading locations:', error));
+    });
+</script>
 
 </body>
 </html>

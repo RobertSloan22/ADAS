@@ -6,7 +6,7 @@ import cv2
 import sys
 import argparse
 from jetson_inference import detectNet
-from jetson_utils import videoSource, videoOutput, Log, cudaAllocMapped, cudaMemcpy, cudaConvertColor, cudaFilter
+from jetson_utils import (cudaAllocMapped, cudaConvertColor, cudaMemcpy, cudaDeviceSynchronize, cudaToNumpy)
 
 app = Flask(__name__)
 
@@ -91,37 +91,6 @@ def detect_traffic_light_state(traffic_light_image):
         return None
 
     return state
-
-# Lane detection class
-class Lane:
-    def __init__(self, orig_frame):
-        self.orig_frame = orig_frame
-
-        # This will hold an image with the lane lines
-        self.lane_line_markings = None
-        self.warped_frame = None
-        self.transformation_matrix = None
-        self.inv_transformation_matrix = None
-        self.orig_image_size = self.orig_frame.shape[::-1][1:]
-
-        width = self.orig_image_size[0]
-        height = self.orig_image_size[1]
-
-        self.padding = int(0.25 * width)  # padding from side of the image in pixels
-        self.roi_points = np.float32([
-            [width * 0.45, height * 0.6],
-            [width * 0.1, height],
-            [width * 0.9, height],
-            [width * 0.55, height * 0.6]
-        ])
-        self.desired_roi_points = np.float32([
-            [self.padding, 0],  # Top-left corner
-            [self.padding, self.orig_image_size[1]],  # Bottom-left corner
-            [self.orig_image_size[0] - self.padding, self.orig_image_size[1]],  # Bottom-right corner
-            [self.orig_image_size[0] - self.padding, 0]  # Top-right corner
-        ])
-
-from jetson_utils import cudaAllocMapped, cudaMemcpy, cudaConvertColor, cudaFilter
 
 class Lane:
     def __init__(self, orig_frame):
